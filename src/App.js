@@ -1,5 +1,6 @@
 //library
 import { useRef, useState } from "react";
+import { v4 } from "uuid";
 
 //style
 import "./reset.scss";
@@ -12,6 +13,8 @@ import LoserCoinPopup from "./components/popup/LoserCoinPopup";
 import { WinnerPopup } from "./components/popup/WinnerPopup";
 import LoadingShuffle from "./components/game/LoadingShufle";
 import Player from "./components/game/Player";
+import Button from "./components/button/Button";
+import { Rules } from "./components/modal/Rules";
 
 //util (helper)
 import playersReset from "./util/playerReset";
@@ -21,8 +24,6 @@ import { fakeData } from "./data/fakeData";
 
 //API
 import { getInit, nextMatch, getDraw } from "./api/getAPI.js";
-import { v4 } from "uuid";
-import Button from "./components/button/Button";
 
 // Please check console or reload page if game is bug. Thank you
 function App() {
@@ -41,6 +42,7 @@ function App() {
     const [winnerScore, setWinnerScore] = useState(false);
     const [winner, setWinner] = useState(false);
     const [loser, setLosers] = useState(null);
+    const [rules, setRules] = useState(false);
 
     const handleShuffle = useRef(); //fix re-render infinitive by useRef
     handleShuffle.current = () => {
@@ -203,11 +205,13 @@ function App() {
                 <LoadingShuffle drawCard={drawCard}></LoadingShuffle>
             )}
             {isPlaying && totalCard > 4 && showCards && (
-                // <button className="draw centerPage" onClick={() => drawCard()}>
-                //     Draw
-                // </button>
                 <Button className="draw centerPage" onClick={() => drawCard()}>
                     Draw
+                </Button>
+            )}
+            {!rules && (
+                <Button className="showRulesBtn" onClick={() => setRules(true)}>
+                    Rules
                 </Button>
             )}
             {/* playerList */}
@@ -227,15 +231,11 @@ function App() {
             <Button className="pause" onClick={() => setShowOption(true)}>
                 Pause
             </Button>
-            {/* <button className="pause" onClick={() => setShowOption(true)}>
-                Pause
-            </button> */}
             {isPlaying && !showCards && (
                 <Button className="resultBtn" onClick={() => handleResult()}>
                     Reveal
                 </Button>
             )}
-
             <div>
                 {showOption && (
                     <Options
@@ -248,7 +248,7 @@ function App() {
                         deckId={deckId}></Options>
                 )}
             </div>
-            {totalCard && totalCard <= 4 && winnerScore && (
+            {totalCard && totalCard <= 4 && winnerScore && !loser && (
                 <ErrorPopup shuffleCard={shuffleCard}></ErrorPopup>
             )}
             {loser && !winner && (
@@ -259,6 +259,7 @@ function App() {
                     drawCard={drawCard}></LoserCoinPopup>
             )}
             {winner && <WinnerPopup handleReset={handleReset}></WinnerPopup>}
+            {rules && <Rules handleClose={() => setRules(false)}></Rules>}
         </div>
     );
 }

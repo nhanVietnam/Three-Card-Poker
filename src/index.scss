@@ -386,7 +386,7 @@ body {
 
 .showRulesBtn {
     z-index: 100;
-    position: fixed;
+    position: absolute;
     top: 20px;
     left: 30px;
     padding: 10px 20px;
@@ -394,6 +394,7 @@ body {
     font-weight: bold;
     border-radius: 18px;
     cursor: pointer;
+    font-size: 2rem;
 }
 
 .rules {
@@ -405,6 +406,8 @@ body {
     padding: 40px;
     color: white;
     font-size: 1.2rem;
+    outline: none;
+    border: none;
 }
 
 .closeModalBtn {
